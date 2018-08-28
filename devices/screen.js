@@ -14,6 +14,18 @@ class Screen
 		this._mask = Math.pow(2, xBits + yBits) - 1;
 		this._videoMemory = new RAM(xBits + yBits, 32);
 	}
+	get videoMemory() {
+		return this._videoMemory;
+	}
+	get colorBits() {
+		return this._colorBits;
+	}
+	get xBits() {
+		return this._xBits;
+	}
+	get yBits() {
+		return this._yBits;
+	}
 	_getVideoMemoryAddress(data) {
 		return (data >>> this._shift) & this._mask;
 	}
