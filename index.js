@@ -27,5 +27,20 @@ let processor = new Processor(memoryBus, deviceBus, instructions);
 
 clock.attachDevice(processor);
 
+[
+	0x50100000,
+	0x50210000,
+	0x50320000,
+
+	0x50122000,
+	0x50212000,
+	0x50302000,
+
+	0x501EC000,
+
+	0x501FE000,
+
+	0x10000000
+].forEach((item, index) => memoryBus.write(index, item));
 
 // do for every clock cycle of the virtual computer: clock.tick();
