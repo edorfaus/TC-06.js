@@ -22,9 +22,10 @@ class TableScreenRenderer
 			for (let x = 0; x < xSize; x++) {
 				let td = document.createElement('td');
 				tr.appendChild(td);
-				cells.push(td);
-				let color = vram.read(x * ySize + y) >>> this._shift;
+				let address = x * ySize + y;
+				let color = vram.read(address) >>> this._shift;
 				td.classList.add('color-' + color);
+				cells[address] = td;
 			}
 		}
 	}
