@@ -48,7 +48,7 @@ class Bus
 	}
 	_getDeviceAt(address) {
 		for (let device of this._devices) {
-			if (device.startAddress >= address && device.endAddress <= address) {
+			if (address >= device.startAddress && address <= device.endAddress) {
 				return device;
 			}
 		}
