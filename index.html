@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>TC-06 emulator</title>
+	<style type="text/css">
+	* {
+		box-sizing: border-box;
+	}
+	.screen-table {
+		table-layout: fixed;
+		border-collapse: collapse;
+		border: 1px solid black;
+		width: 50%;
+	}
+	/* This (and the table-layout) is here to make the cells be squares. */
+	.screen-table td::before {
+		content: "";
+		display: block;
+		padding-top: 100%;
+	}
+	.screen-table tbody, .screen-table tr, .screen-table td {
+		border: none;
+	}
+	.color-0 {
+		background-color: #000000;
+	}
+	.color-1 {
+		background-color: #FFFFFF;
+	}
+	.color-2 {
+		background-color: #3A7005;
+	}
+	.color-3 {
+		background-color: #A8DC36;
+	}
+	</style>
+	<script type="text/javascript" src="clock.js"></script>
+
+	<script type="text/javascript" src="bus.js"></script>
+	<script type="text/javascript" src="memorybus.js"></script>
+	<script type="text/javascript" src="devicebus.js"></script>
+
+	<script type="text/javascript" src="devices/ram.js"></script>
+	<script type="text/javascript" src="devices/drive.js"></script>
+	<script type="text/javascript" src="devices/screen.js"></script>
+
+	<script type="text/javascript" src="instructions/nil.js"></script>
+	<script type="text/javascript" src="instructions/hlt.js"></script>
+	<script type="text/javascript" src="instructions/movi.js"></script>
+	<script type="text/javascript" src="instructions/movo.js"></script>
+	<script type="text/javascript" src="instructions/jmp.js"></script>
+	<script type="text/javascript" src="instructions/setdata.js"></script>
+	<script type="text/javascript" src="instructions/getdata.js"></script>
+	<script type="text/javascript" src="instructions/set.js"></script>
+	<script type="text/javascript" src="instructions/ifjmp.js"></script>
+	<script type="text/javascript" src="instructions/pmov.js"></script>
+	<script type="text/javascript" src="instructions/math.js"></script>
+
+	<script type="text/javascript" src="processor.js"></script>
+
+	<script type="text/javascript" src="renderer/tablescreenrenderer.js"></script>
+</head>
+<body>
+	<table id="screen-table">
+	</table>
+	<script type="text/javascript" src="index.js"></script>
+</body>
+</html>
