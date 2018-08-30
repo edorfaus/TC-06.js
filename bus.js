@@ -12,9 +12,10 @@ class Bus
 		this._maxAddress = Math.pow(2, addressBits) - 1;
 		this._maxData = Math.pow(2, dataBits) - 1;
 		this._devices = [];
+		this._maxAssignedAddress = -1;
 	}
-	get maxAddress() {
-		return this._maxAddress;
+	get maxAssignedAddress() {
+		return this._maxAssignedAddress;
 	}
 	attachDevice(startAddress, addressCount, device) {
 		let endAddress = startAddress + addressCount - 1;
@@ -40,6 +41,9 @@ class Bus
 			endAddress: endAddress,
 			device: device
 		});
+		if (endAddress > this._maxAssignedAddress) {
+			this._maxAssignedAddress = endAddress;
+		}
 		return this;
 	}
 	_getDeviceAt(address) {

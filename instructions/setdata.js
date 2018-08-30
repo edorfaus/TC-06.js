@@ -27,7 +27,7 @@ class SetdataInstruction
 				let direction = (instruction >>> 21) & 0x00000001;
 				let address = instruction & 0x001FFFFF;
 				if (direction == 1) {
-					address = processor.memoryBus.maxAddress - address;
+					address = processor.memoryBus.maxAssignedAddress - address;
 				}
 				value = processor.memoryBus.read(address);
 				break;
