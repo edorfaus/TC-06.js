@@ -14,6 +14,12 @@ class RAM
 		this._data = new Array(this._maxAddress + 1).fill(0);
 		this._listeners = [];
 	}
+	get maxAddress() {
+		return this._maxAddress;
+	}
+	get maxValue() {
+		return this._maxValue;
+	}
 	read(address) {
 		if (address < 0 || address > this._maxAddress) {
 			throw new Error('RAM read failed: address out of range');

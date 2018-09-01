@@ -1,17 +1,9 @@
 class Drive
 {
-	constructor(addressBits, dataBits) {
-		if (addressBits < 1 || addressBits > 32) {
-			throw new Error('Drive address bits out of range (must be 1-32)');
-		}
-		if (dataBits < 1) {
-			throw new Error('Drive data bits out of range (must be above 0)');
-		}
-		this._addressBits = addressBits;
-		this._dataBits = dataBits;
-		this._maxAddress = Math.pow(2, addressBits) - 1;
-		this._maxValue = Math.pow(2, dataBits) - 1;
-		this._data = new Array(this._maxAddress + 1).fill(0);
+	constructor(memory) {
+		this._memory = memory;
+		this._maxAddress = memory.maxAddress;
+		this._maxValue = memory.maxValue;
 		this._writeAddress = null;
 	}
 	getData(address) {
@@ -19,24 +11,23 @@ class Drive
 			// Read failed: address out of range
 			return;
 		}
-		return this._data[address];
+		return this._memory.read(address);
 	}
 	setData(data) {
 		if (this._writeAddress === null) {
 			if (data < 0 || address > this._maxAddress) {
 				// Write failed: address out of range
-				return;
+				return false;
 			}
 			this._writeAddress = data;
-		} else {
-			let address = this._writeAddress;
-			this._writeAddress = null;
-			if (value < 0 || value > this._maxValue) {
-				// Write failed: data out of range
-				return;
-			}
-			this._data[address] = value;
+			return true;
 		}
-		return true;
+		let address = this._writeAddress;
+		this._writeAddress = null;
+		if (value < 0 || value > this._maxValue) {
+			// Write failed: data out of range
+			return false;
+		}
+		return this._memory.write(address, value);
 	}
 }
