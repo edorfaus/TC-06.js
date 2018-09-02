@@ -1,6 +1,7 @@
-class Bus
+class Bus extends EventEmitter
 {
-	constructor(addressBits, dataBits) {
+	constructor(addressBits, dataBits, ...knownEvents) {
+		super('attach-device', ...knownEvents);
 		if (addressBits < 1) {
 			throw new Error('Bus address bits out of range (must be above 0)');
 		}
@@ -43,6 +44,17 @@ class Bus
 		});
 		if (endAddress > this._maxAssignedAddress) {
 			this._maxAssignedAddress = endAddress;
+		}
+		if (EventEmitter.hasListener(this, 'attach-device')) {
+			let _this = this;
+			let event = {
+				get bus() { return _this; },
+				get startAddress() { return startAddress; },
+				get addressCount() { return addressCount; },
+				get endAddress() { return endAddress; },
+				get device() { return device; }
+			};
+			EventEmitter.emit(this, 'attach-device', event);
 		}
 		return this;
 	}
