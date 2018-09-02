@@ -1,7 +1,7 @@
 class RAM extends EventEmitter
 {
 	constructor(addressBits, dataBits) {
-		super('change');
+		super('write');
 		if (addressBits < 1 || addressBits > 32) {
 			throw new Error('RAM address bits out of range (must be 1-32)');
 		}
@@ -33,17 +33,15 @@ class RAM extends EventEmitter
 		if (value < 0 || value > this._maxValue) {
 			throw new Error('RAM write failed: data value out of range');
 		}
-		let oldValue = this._data[address];
 		this._data[address] = value;
-		if (value !== oldValue && EventEmitter.hasListener(this, 'change')) {
+		if (EventEmitter.hasListener(this, 'write')) {
 			let _this = this;
 			let event = {
 				get memory() { return _this; },
 				get address() { return address; },
-				get oldValue() { return oldValue; },
-				get newValue() { return value; }
+				get value() { return value; }
 			};
-			EventEmitter.emit(this, 'change', event);
+			EventEmitter.emit(this, 'write', event);
 		}
 		return true;
 	}

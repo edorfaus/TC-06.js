@@ -5,14 +5,14 @@ class TableScreenRenderer
 		this._screen = null;
 		this._cells = null;
 		this._shift = null;
-		this._onChange = this._onChange.bind(this);
+		this._onWrite = this._onWrite.bind(this);
 
 		this._table.classList.add('screen-table');
 		this._table.innerHTML = '';
 	}
 	link(screen) {
 		if (this._screen) {
-			this._screen.videoMemory.off('change', this._onChange);
+			this._screen.videoMemory.off('write', this._onWrite);
 		}
 
 		this._table.innerHTML = '';
@@ -52,13 +52,11 @@ class TableScreenRenderer
 			}
 		}
 
-		videoMemory.on('change', this._onChange);
+		videoMemory.on('write', this._onWrite);
 	}
-	_onChange(e) {
-		let oldColor = e.oldValue >>> this._shift;
-		let newColor = e.newValue >>> this._shift;
+	_onWrite(e) {
+		let color = e.value >>> this._shift;
 		let cell = this._cells[e.address];
-		cell.classList.remove('color-' + oldColor);
-		cell.classList.add('color-' + newColor);
+		cell.className = 'color-' + color;
 	}
 }
