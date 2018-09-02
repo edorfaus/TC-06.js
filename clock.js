@@ -1,7 +1,7 @@
 class Clock extends EventEmitter
 {
 	constructor() {
-		super('tick');
+		super('tick', 'set-frequency', 'set-running', 'start', 'stop');
 		this._frequency = 60;
 		this._interval = 1000 / this._frequency;
 		this._intervalID = null;
@@ -18,6 +18,13 @@ class Clock extends EventEmitter
 		if (!Number.isFinite(frequency) || frequency <= 0) {
 			throw new Error('Invalid frequency: must be finite and above 0');
 		}
+		if (EventEmitter.hasListener(this, 'set-frequency')) {
+			let _this = this;
+			EventEmitter.emit(this, 'set-frequency', {
+				get clock() { return _this; },
+				get frequency() { return frequency; }
+			});
+		}
 		if (frequency === this._frequency) {
 			return;
 		}
@@ -33,6 +40,16 @@ class Clock extends EventEmitter
 		return this._intervalID !== null;
 	}
 	set running(running) {
+		if (typeof running !== 'boolean') {
+			throw new Error('Invalid type: running must be a boolean');
+		}
+		if (EventEmitter.hasListener(this, 'set-running')) {
+			let _this = this;
+			EventEmitter.emit(this, 'set-running', {
+				get clock() { return _this; },
+				get running() { return running; }
+			});
+		}
 		if (running === this.running) {
 			return;
 		}
@@ -45,6 +62,13 @@ class Clock extends EventEmitter
 			this._intervalID = setInterval(this._timerCallback, this._interval);
 			this._lastTick = performance.now();
 			this.tick();
+		}
+		let event = running ? 'start' : 'stop';
+		if (EventEmitter.hasListener(this, event)) {
+			let _this = this;
+			EventEmitter.emit(this, event, {
+				get clock() { return _this; }
+			});
 		}
 	}
 	_timerCallback() {

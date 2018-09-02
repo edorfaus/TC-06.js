@@ -27,6 +27,8 @@ let processor = new Processor(memoryBus, deviceBus, instructions);
 
 clock.on('tick', () => processor.tick());
 
+new SystemControls(document.getElementById('system-controls')).link(clock);
+
 [
 	0x50100000,
 	0x50210000,
@@ -39,6 +41,12 @@ clock.on('tick', () => processor.tick());
 	0x501EC000,
 
 	0x501FE000,
+
+	0x10000004,
+	0x501F0000,
+	0x10000004,
+	0x502F0000,
+	0x48000010,
 
 	0x10000000
 ].forEach((item, index) => memoryBus.write(index, item));

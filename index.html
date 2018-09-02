@@ -9,6 +9,30 @@
 	* {
 		box-sizing: border-box;
 	}
+	.box {
+		border: 1px solid black;
+	}
+	.box > h3:first-child {
+		padding: 2px;
+		margin: 0 0 2px 0;
+		border-bottom: 1px solid black;
+		text-align: center;
+		background: #E0E0E0;
+	}
+	.box > div {
+		padding: 2px;
+	}
+	.error {
+		background-color: #FFC0C0;
+	}
+	.system-controls {
+		float: right;
+	}
+	.system-controls input[type="number"] {
+		box-sizing: content-box;
+		width: 8ex;
+		width: 8ch;
+	}
 	.screen-table {
 		table-layout: fixed;
 		border-collapse: collapse;
@@ -64,8 +88,14 @@
 	<script type="text/javascript" src="processor.js"></script>
 
 	<script type="text/javascript" src="renderer/tablescreenrenderer.js"></script>
+	<script type="text/javascript" src="renderer/systemcontrols.js"></script>
 </head>
 <body>
+	<div class="box system-controls">
+		<h3>System</h3>
+		<div id="system-controls">
+		</div>
+	</div>
 	<table id="screen-table">
 	</table>
 	<script type="text/javascript" src="index.js"></script>
