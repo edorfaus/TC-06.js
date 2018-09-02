@@ -25,7 +25,7 @@ instructions[0xA] = new MathInstruction();
 
 let processor = new Processor(memoryBus, deviceBus, instructions);
 
-clock.attachDevice(processor);
+clock.on('tick', () => processor.tick());
 
 [
 	0x50100000,
