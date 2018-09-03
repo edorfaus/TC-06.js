@@ -60,3 +60,30 @@ clock.on('render-tick', () => registersRenderer.renderTick());
 
 	0x10000000
 ].forEach((item, index) => memoryBus.write(index, item));
+
+let ticks = 0;
+
+function testPerf(freq) {
+	let counter = () => ticks++;
+	clock.on('tick', counter);
+	let oldFreq = clock.frequency;
+	clock.frequency = freq;
+	clock.running = true;
+	let ticksPre, ticksPost, nowPre, nowPost;
+	setTimeout(() => {
+		ticksPre = ticks;
+		nowPre = performance.now();
+		console.log('pre', ticksPre, nowPre);
+		setTimeout(() => {
+			ticksPost = ticks;
+			nowPost = performance.now();
+			console.log('post', ticksPost, nowPost);
+			clock.running = false;
+			clock.frequency = oldFreq;
+			clock.off('tick', counter);
+			let ticksDiff = ticksPost - ticksPre;
+			let nowDiff = nowPost - nowPre;
+			console.log('diff', ticksDiff, 't /', nowDiff, 'ms =', 1000*ticksDiff/nowDiff, 'Hz');
+		}, 10000);
+	}, 100);
+}
