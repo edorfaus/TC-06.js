@@ -5,67 +5,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>TC-06 emulator</title>
-	<style type="text/css">
-	* {
-		box-sizing: border-box;
-	}
-	.box {
-		border: 1px solid black;
-	}
-	.box > h3:first-child {
-		padding: 2px;
-		margin: 0;
-		border-bottom: 1px solid black;
-		text-align: center;
-		background: #E0E0E0;
-	}
-	.box > div {
-		padding: 2px;
-	}
-	.error {
-		background-color: #FFC0C0;
-	}
-	.screen {
-		float: left;
-		width: 50%;
-		/* Because the subpixel rounding causes it to be visible sometimes: */
-		background: #000000;
-	}
-	.system-controls {
-		float: right;
-	}
-	.system-controls input[type="number"] {
-		box-sizing: content-box;
-		width: 8ex;
-		width: 8ch;
-	}
-	.screen-table {
-		table-layout: fixed;
-		border-collapse: collapse;
-		width: 100%;
-	}
-	/* This (and the table-layout) is here to make the cells be squares. */
-	.screen-table td::before {
-		content: "";
-		display: block;
-		padding-top: 100%;
-	}
-	.screen-table, .screen-table * {
-		border: none;
-	}
-	.color-0 {
-		background-color: #000000;
-	}
-	.color-1 {
-		background-color: #FFFFFF;
-	}
-	.color-2 {
-		background-color: #3A7005;
-	}
-	.color-3 {
-		background-color: #A8DC36;
-	}
-	</style>
+
+	<link rel="stylesheet" href="css/core.css">
+	<link rel="stylesheet" href="css/screen.css">
+	<link rel="stylesheet" href="css/index.css">
+
 	<script type="text/javascript" src="eventemitter.js"></script>
 
 	<script type="text/javascript" src="clock.js"></script>

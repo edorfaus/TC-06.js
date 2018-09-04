@@ -1,0 +1,27 @@
+* {
+	box-sizing: border-box;
+}
+
+.box {
+	border: 1px solid black;
+	padding: 0;
+	margin: 2px;
+}
+.box > * {
+	width: 100%;
+	margin: 0;
+	border: none;
+}
+.box > h3:first-child {
+	padding: 2px;
+	border-bottom: 1px solid #000000;
+	background: #E0E0E0;
+	text-align: center;
+}
+.box > div {
+	padding: 2px;
+}
+
+.error {
+	background-color: #FFC0C0;
+}

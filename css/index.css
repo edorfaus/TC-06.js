@@ -1,0 +1,16 @@
+.box.screen {
+	float: left;
+	width: 50%;
+	/* Because the subpixel rounding causes it to be visible sometimes: */
+	background: #000000;
+}
+.box.system-controls {
+	float: left;
+}
+
+/* This belong in a separate file, but, a file for one rule..? Come on... */
+.system-controls input[type="number"] {
+	box-sizing: content-box;
+	width: 8ex;
+	width: 8ch;
+}

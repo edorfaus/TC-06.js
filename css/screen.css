@@ -1,0 +1,26 @@
+.screen-table {
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+/* This (and the table-layout) is here to make the cells be squares. */
+.screen-table td::before {
+	content: "";
+	display: block;
+	padding-top: 100%;
+}
+.screen-table, .screen-table * {
+	border: none;
+}
+
+.color-0 {
+	background-color: #000000;
+}
+.color-1 {
+	background-color: #FFFFFF;
+}
+.color-2 {
+	background-color: #3A7005;
+}
+.color-3 {
+	background-color: #A8DC36;
+}
