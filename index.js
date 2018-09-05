@@ -29,6 +29,10 @@ clock.on('tick', () => processor.tick());
 
 new SystemControls(document.getElementById('system-controls')).link(clock);
 
+new MainMemoryRenderer(document.getElementById('main-memory')).link(memoryBus);
+
+new MemoryRenderer(document.getElementById('registers')).link(processor.registers);
+
 [
 	0x50100000,
 	0x50210000,
@@ -50,5 +54,3 @@ new SystemControls(document.getElementById('system-controls')).link(clock);
 
 	0x10000000
 ].forEach((item, index) => memoryBus.write(index, item));
-
-// do for every clock cycle of the virtual computer: clock.tick();

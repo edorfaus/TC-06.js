@@ -15,6 +15,15 @@ class Bus extends EventEmitter
 		this._devices = [];
 		this._maxAssignedAddress = -1;
 	}
+	get addressBits() {
+		return this._addressBits;
+	}
+	get dataBits() {
+		return this._dataBits;
+	}
+	get maxAddress() {
+		return this._maxAddress;
+	}
 	get maxAssignedAddress() {
 		return this._maxAssignedAddress;
 	}

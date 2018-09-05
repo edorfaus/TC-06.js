@@ -30,18 +30,6 @@ class SystemControls
 	_onSetRunning(e) {
 		this._runInput.checked = e.running;
 	}
-	_findId(baseId) {
-		let id = baseId;
-		if (document.getElementById(id)) {
-			id += '-';
-			let num = 1;
-			while (document.getElementById(id + num)) {
-				num++;
-			}
-			id += num;
-		}
-		return id;
-	}
 	_render() {
 		this._container.innerHTML = '';
 
@@ -58,7 +46,7 @@ class SystemControls
 		this._frequencyInput.value = 60;
 		div.appendChild(this._frequencyInput);
 
-		let id = this._findId(this._container.id + '-frequency');
+		let id = Util.findFreeId(this._container.id + '-frequency');
 		this._frequencyInput.id = id;
 		label.htmlFor = id;
 
@@ -87,7 +75,7 @@ class SystemControls
 		label.appendChild(document.createTextNode('Run'));
 		div.appendChild(label);
 
-		id = this._findId(this._container.id + '-run');
+		id = Util.findFreeId(this._container.id + '-run');
 		this._runInput.id = id;
 		label.htmlFor = id;
 

@@ -14,6 +14,12 @@ class RAM extends EventEmitter
 		this._maxValue = Math.pow(2, dataBits) - 1;
 		this._data = new Array(this._maxAddress + 1).fill(0);
 	}
+	get addressBits() {
+		return this._addressBits;
+	}
+	get dataBits() {
+		return this._dataBits;
+	}
 	get maxAddress() {
 		return this._maxAddress;
 	}

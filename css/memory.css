@@ -1,0 +1,43 @@
+.memory .header .field {
+	display: flex;
+	align-items: baseline;
+}
+.memory .header .field > label {
+	flex: 0 0 auto;
+	padding-right: 0.5ex;
+	padding-right: 0.5ch;
+}
+.memory .header .field > input {
+	flex: 1 0 auto;
+}
+.memory .header button {
+	width: 100%;
+}
+.memory .header > ul {
+	list-style-type: none;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: baseline;
+	padding: 0;
+	margin: 0;
+}
+.memory .header > ul > li {
+	flex: 1 0 auto;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+.memory .header > ul > li > * {
+	vertical-align: middle;
+}
+.memory .data {
+	border-top: 1px solid #000000;
+	max-height: 50vh;
+	overflow-y: scroll;
+}
+.memory .data input {
+	box-sizing: content-box;
+	display: block;
+	width: 32ex;
+	width: 32ch;
+}

@@ -7,6 +7,9 @@
 .box.system-controls {
 	float: left;
 }
+.box.memory {
+	float: right;
+}
 
 /* This belong in a separate file, but, a file for one rule..? Come on... */
 .system-controls input[type="number"] {
