@@ -14,6 +14,8 @@ let MemoryRenderer = (() => {
 			this._rangeInput = document.createElement('input');
 			this._currentRange = [[0, 0]];
 			this._dataInputAddresses = new WeakMap();
+			this._useRenderTicks = false;
+			this._updatesSinceTick = 0;
 
 			this._onMemoryWrite = this._onMemoryWrite.bind(this);
 			this._onInputChange = this._onInputChange.bind(this);
@@ -59,6 +61,13 @@ let MemoryRenderer = (() => {
 			if (this._memory) {
 				this._memory.on('write', this._onMemoryWrite);
 			}
+		}
+		renderTick() {
+			if (this._useRenderTicks && this._updatesSinceTick > 3) {
+				this._updateAllDataInputs();
+			}
+			this._useRenderTicks = true;
+			this._updatesSinceTick = 0;
 		}
 		_setId(element, suffix) {
 			let baseId = this._container.id;
@@ -163,6 +172,15 @@ let MemoryRenderer = (() => {
 				inputAddresses.delete(input);
 			}
 		}
+		_updateAllDataInputs() {
+			let inputAddresses = this._dataInputAddresses;
+			let formatter = this._getFormatter();
+			for (let input of this._existingDataInputs()) {
+				let address = inputAddresses.get(input);
+				let value = this._memory.read(address);
+				this._updateDataInput(input, address, value, formatter);
+			}
+		}
 		_updateDataInput(input, address, value, formatter) {
 			if (typeof value === 'number') {
 				input.value = formatter.format(value, this._memory);
@@ -251,6 +269,11 @@ let MemoryRenderer = (() => {
 			}
 		}
 		_onMemoryWrite(e) {
+			if (this._useRenderTicks && this._updatesSinceTick > 3) {
+				return;
+			}
+			this._updatesSinceTick++;
+
 			let address = e.address;
 			let inRange = false;
 			for (let range of this._currentRange) {
@@ -302,7 +325,7 @@ let MemoryRenderer = (() => {
 				return;
 			}
 			if (input.classList.contains('formatter')) {
-				this._renderData();
+				this._updateAllDataInputs();
 				return;
 			}
 			if (this._dataInputAddresses.has(input)) {

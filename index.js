@@ -29,9 +29,15 @@ clock.on('tick', () => processor.tick());
 
 new SystemControls(document.getElementById('system-controls')).link(clock);
 
-new MainMemoryRenderer(document.getElementById('main-memory')).link(memoryBus);
+let mainMemoryRenderer = new MainMemoryRenderer(document.getElementById('main-memory'));
+mainMemoryRenderer.link(memoryBus);
 
-new MemoryRenderer(document.getElementById('registers')).link(processor.registers);
+clock.on('render-tick', () => mainMemoryRenderer.renderTick());
+
+let registersRenderer = new MemoryRenderer(document.getElementById('registers'));
+registersRenderer.link(processor.registers);
+
+clock.on('render-tick', () => registersRenderer.renderTick());
 
 [
 	0x50100000,

@@ -1,15 +1,20 @@
 class Clock extends EventEmitter
 {
 	constructor() {
-		super('tick', 'set-frequency', 'set-running', 'start', 'stop');
+		super('tick', 'render-tick', 'set-frequency', 'set-running', 'start', 'stop');
 		this._frequency = 60;
 		this._interval = 1000 / this._frequency;
 		this._intervalID = null;
 		this._lastTick = null;
 		this._timerCallback = this._timerCallback.bind(this);
+		let _this = this;
+		this._clockOnlyEvent = {
+			get clock() { return _this; }
+		};
 	}
 	tick() {
-		EventEmitter.emit(this, 'tick');
+		EventEmitter.emit(this, 'tick', this._clockOnlyEvent);
+		EventEmitter.emit(this, 'render-tick', this._clockOnlyEvent);
 	}
 	get frequency() {
 		return this._frequency;
@@ -56,19 +61,15 @@ class Clock extends EventEmitter
 		if (this._intervalID !== null) {
 			clearInterval(this._intervalID);
 			this._intervalID = null;
-			this._lastTick = null;
 		}
+		this._lastTick = null;
 		if (running) {
 			this._intervalID = setInterval(this._timerCallback, this._interval);
+			EventEmitter.emit(this, 'start', this._clockOnlyEvent);
 			this._lastTick = performance.now();
-			this.tick();
-		}
-		let event = running ? 'start' : 'stop';
-		if (EventEmitter.hasListener(this, event)) {
-			let _this = this;
-			EventEmitter.emit(this, event, {
-				get clock() { return _this; }
-			});
+			EventEmitter.emit(this, 'tick', this._clockOnlyEvent);
+		} else {
+			EventEmitter.emit(this, 'stop', this._clockOnlyEvent);
 		}
 	}
 	_timerCallback() {
@@ -77,14 +78,15 @@ class Clock extends EventEmitter
 		// Catch up to how many ticks we should have had in this timer period
 		let nextTick = this._lastTick + interval;
 		while (nextTick < now) {
-			this.tick();
+			EventEmitter.emit(this, 'tick', this._clockOnlyEvent);
 			this._lastTick = nextTick;
 			nextTick += interval;
 		}
 		// Check if it's closer to do the next tick now instead of next time
 		if (nextTick - now < interval / 2) {
-			this.tick();
+			EventEmitter.emit(this, 'tick', this._clockOnlyEvent);
 			this._lastTick = nextTick;
 		}
+		EventEmitter.emit(this, 'render-tick', this._clockOnlyEvent);
 	}
 }
