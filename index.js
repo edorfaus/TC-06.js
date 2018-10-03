@@ -10,7 +10,9 @@ let screen = new Screen(2, 4, 3);
 deviceBus.attachDevice(0, 1, screen);
 deviceBus.attachDevice(1, 1, new Drive(new RAM(8, 32)));
 
-new TableScreenRenderer(document.getElementById('screen-table')).link(screen);
+let screenRenderer = new TableScreenRenderer(document.getElementById('screen-table'));
+screenRenderer.link(screen);
+uiManager.add(screenRenderer);
 
 let instructions = [];
 instructions[0x0] = new NilInstruction();

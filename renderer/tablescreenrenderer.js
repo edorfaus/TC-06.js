@@ -5,16 +5,11 @@ class TableScreenRenderer
 		this._screen = null;
 		this._cells = null;
 		this._shift = null;
-		this._onWrite = this._onWrite.bind(this);
 
 		this._table.classList.add('screen-table');
 		this._table.innerHTML = '';
 	}
 	link(screen) {
-		if (this._screen) {
-			this._screen.videoMemory.off('write', this._onWrite);
-		}
-
 		this._table.innerHTML = '';
 
 		if (!screen) {
@@ -51,12 +46,18 @@ class TableScreenRenderer
 				td.classList.add('color-' + color);
 			}
 		}
-
-		videoMemory.on('write', this._onWrite);
 	}
-	_onWrite(e) {
-		let color = e.value >>> this._shift;
-		let cell = this._cells[e.address];
-		cell.className = 'color-' + color;
+	refresh() {
+		let cells = this._cells;
+		let videoMemory = this._screen.videoMemory;
+		let shift = this._shift;
+		for (let address = cells.length - 1; address >= 0; address--) {
+			let color = videoMemory.read(address) >>> shift;
+			let className = 'color-' + color;
+			let cell = cells[address];
+			if (cell.className !== className) {
+				cell.className = className;
+			}
+		}
 	}
 }
