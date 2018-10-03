@@ -1,7 +1,7 @@
 class MemoryBus extends Bus
 {
 	constructor(addressBits, dataBits) {
-		super(addressBits, dataBits, 'write');
+		super(addressBits, dataBits);
 	}
 	attachDevice(startAddress, addressCount, device) {
 		if (!device || !device.read || !device.write) {
@@ -21,17 +21,7 @@ class MemoryBus extends Bus
 		}
 		let device = this._getDeviceAt(address);
 		if (device) {
-			let ret = device.device.write(address - device.startAddress, data);
-			if (EventEmitter.hasListener(this, 'write')) {
-				let _this = this;
-				let event = {
-					get memory() { return _this; },
-					get address() { return address; },
-					get value() { return data; }
-				};
-				EventEmitter.emit(this, 'write', event);
-			}
-			return ret;
+			return device.device.write(address - device.startAddress, data);
 		}
 	}
 }
