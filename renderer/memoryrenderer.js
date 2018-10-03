@@ -6,18 +6,16 @@ let MemoryRenderer = (() => {
 		static get valueFormatters() {
 			return valueFormatters;
 		}
-		constructor(container) {
+		constructor(container, uiManager) {
 			this._container = container;
+			this._uiManager = uiManager;
 			this._memory = null;
 			this._headerDiv = document.createElement('div');
 			this._dataDiv = document.createElement('div');
 			this._rangeInput = document.createElement('input');
 			this._currentRange = [[0, 0]];
 			this._dataInputAddresses = new WeakMap();
-			this._useRenderTicks = false;
-			this._updatesSinceTick = 0;
 
-			this._onMemoryWrite = this._onMemoryWrite.bind(this);
 			this._onInputChange = this._onInputChange.bind(this);
 
 			this._headerDiv.className = 'header';
@@ -43,9 +41,6 @@ let MemoryRenderer = (() => {
 				return;
 			}
 
-			if (this._memory) {
-				this._memory.off('write', this._onMemoryWrite);
-			}
 			this._memory = memory ? memory : null;
 
 			if (this._memory) {
@@ -57,17 +52,9 @@ let MemoryRenderer = (() => {
 
 			this._renderHeader();
 			this._renderData();
-
-			if (this._memory) {
-				this._memory.on('write', this._onMemoryWrite);
-			}
 		}
-		renderTick() {
-			if (this._useRenderTicks && this._updatesSinceTick > 3) {
-				this._updateAllDataInputs();
-			}
-			this._useRenderTicks = true;
-			this._updatesSinceTick = 0;
+		refresh() {
+			this._updateAllDataInputs();
 		}
 		_setId(element, suffix) {
 			let baseId = this._container.id;
@@ -268,31 +255,6 @@ let MemoryRenderer = (() => {
 				input = next;
 			}
 		}
-		_onMemoryWrite(e) {
-			if (this._useRenderTicks && this._updatesSinceTick > 3) {
-				return;
-			}
-			this._updatesSinceTick++;
-
-			let address = e.address;
-			let inRange = false;
-			for (let range of this._currentRange) {
-				if (address >= Math.min(range[0], range[1]) && address <= Math.max(range[0], range[1])) {
-					inRange = true;
-					break;
-				}
-			}
-			if (!inRange) {
-				return;
-			}
-			let inputAddresses = this._dataInputAddresses;
-			let formatter = this._getFormatter();
-			for (let input of this._existingDataInputs()) {
-				if (inputAddresses.get(input) === address) {
-					this._updateDataInput(input, address, e.value, formatter);
-				}
-			}
-		}
 		_onInputChange(e) {
 			let input = e.target;
 			if (input === this._rangeInput) {
@@ -341,6 +303,7 @@ let MemoryRenderer = (() => {
 					} else {
 						input.classList.add('error');
 					}
+					this._uiManager.triggerRefresh();
 				}
 				return;
 			}

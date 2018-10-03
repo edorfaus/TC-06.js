@@ -1,7 +1,7 @@
 class MainMemoryRenderer extends MemoryRenderer
 {
-	constructor(container) {
-		super(container);
+	constructor(container, uiManager) {
+		super(container, uiManager);
 		this._assignedMemoryDiv = document.createElement('div');
 		this._onAttachDevice = this._onAttachDevice.bind(this);
 	}

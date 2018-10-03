@@ -1,7 +1,8 @@
 class Clock extends EventEmitter
 {
-	constructor() {
-		super('tick', 'render-tick', 'set-frequency', 'set-running', 'start', 'stop');
+	constructor(uiManager) {
+		super('tick', 'set-frequency', 'set-running', 'start', 'stop');
+		this._uiManager = uiManager;
 		this._frequency = 60;
 		this._interval = 1000 / this._frequency;
 		this._intervalID = null;
@@ -14,7 +15,7 @@ class Clock extends EventEmitter
 	}
 	tick() {
 		EventEmitter.emit(this, 'tick', this._clockOnlyEvent);
-		EventEmitter.emit(this, 'render-tick', this._clockOnlyEvent);
+		this._uiManager.triggerRefresh();
 	}
 	get frequency() {
 		return this._frequency;
@@ -87,6 +88,6 @@ class Clock extends EventEmitter
 			EventEmitter.emit(this, 'tick', this._clockOnlyEvent);
 			this._lastTick = nextTick;
 		}
-		EventEmitter.emit(this, 'render-tick', this._clockOnlyEvent);
+		this._uiManager.triggerRefresh();
 	}
 }

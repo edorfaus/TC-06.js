@@ -1,4 +1,6 @@
-let clock = new Clock();
+let uiManager = new UIManager();
+
+let clock = new Clock(uiManager);
 let memoryBus = new MemoryBus(24, 32);
 let deviceBus = new DeviceBus(4, 32);
 
@@ -29,15 +31,17 @@ clock.on('tick', () => processor.tick());
 
 new SystemControls(document.getElementById('system-controls')).link(clock);
 
-let mainMemoryRenderer = new MainMemoryRenderer(document.getElementById('main-memory'));
+let mainMemoryRenderer = new MainMemoryRenderer(
+	document.getElementById('main-memory'), uiManager
+);
 mainMemoryRenderer.link(memoryBus);
+uiManager.add(mainMemoryRenderer);
 
-clock.on('render-tick', () => mainMemoryRenderer.renderTick());
-
-let registersRenderer = new MemoryRenderer(document.getElementById('registers'));
+let registersRenderer = new MemoryRenderer(
+	document.getElementById('registers'), uiManager
+);
 registersRenderer.link(processor.registers);
-
-clock.on('render-tick', () => registersRenderer.renderTick());
+uiManager.add(registersRenderer);
 
 [
 	0x50100000,
@@ -52,6 +56,8 @@ clock.on('render-tick', () => registersRenderer.renderTick());
 
 	0x501FE000,
 
+	0x70200000,
+
 	0x10000004,
 	0x501F0000,
 	0x10000004,
@@ -60,3 +66,4 @@ clock.on('render-tick', () => registersRenderer.renderTick());
 
 	0x10000000
 ].forEach((item, index) => memoryBus.write(index, item));
+uiManager.triggerRefresh();
