@@ -33,6 +33,7 @@ class MainMemoryRenderer extends MemoryRenderer
 		if (input.readOnly) {
 			input.value = 'Unassigned';
 			input.classList.remove('error');
+			this._dataInputValues.set(input, value);
 		} else {
 			super._updateDataInput(input, address, value, formatter);
 		}

@@ -15,6 +15,7 @@ let MemoryRenderer = (() => {
 			this._rangeInput = document.createElement('input');
 			this._currentRange = [[0, 0]];
 			this._dataInputAddresses = new WeakMap();
+			this._dataInputValues = new WeakMap();
 
 			this._onInputChange = this._onInputChange.bind(this);
 
@@ -54,7 +55,18 @@ let MemoryRenderer = (() => {
 			this._renderData();
 		}
 		refresh() {
-			this._updateAllDataInputs();
+			let inputAddresses = this._dataInputAddresses;
+			let inputValues = this._dataInputValues;
+			let memory = this._memory;
+			let formatter = this._getFormatter();
+			for (let input of this._existingDataInputs()) {
+				let address = inputAddresses.get(input);
+				let oldValue = inputValues.get(input);
+				let newValue = memory.read(address);
+				if (newValue !== oldValue) {
+					this._updateDataInput(input, address, newValue, formatter);
+				}
+			}
 		}
 		_setId(element, suffix) {
 			let baseId = this._container.id;
@@ -154,9 +166,11 @@ let MemoryRenderer = (() => {
 				this._updateDataInput(input, address, value, formatter);
 			}
 			// Remove any extraneous inputs
+			let inputValues = this._dataInputValues;
 			for (let input of inputIter) {
 				dataDiv.removeChild(input);
 				inputAddresses.delete(input);
+				inputValues.delete(input);
 			}
 		}
 		_updateAllDataInputs() {
@@ -176,6 +190,7 @@ let MemoryRenderer = (() => {
 				input.value = 'Read failed';
 				input.classList.add('error');
 			}
+			this._dataInputValues.set(input, value);
 		}
 		_getFormatter() {
 			for (let el of this._headerDiv.getElementsByClassName('formatter')) {
