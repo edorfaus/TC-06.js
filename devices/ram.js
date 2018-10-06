@@ -9,9 +9,13 @@ class RAM
 		}
 		this._addressBits = addressBits;
 		this._dataBits = dataBits;
-		this._maxAddress = Math.pow(2, addressBits) - 1;
-		this._maxValue = Math.pow(2, dataBits) - 1;
-		this._data = new Array(this._maxAddress + 1).fill(0);
+		this._addressRange = new ThrowingRange(
+			0, Math.pow(2, addressBits) - 1, 'Address out of range'
+		);
+		this._valueRange = new ThrowingRange(
+			0, Math.pow(2, dataBits) - 1, 'Data value out of range'
+		);
+		this._data = new Array(this._addressRange.size).fill(0);
 	}
 	get addressBits() {
 		return this._addressBits;
@@ -20,24 +24,24 @@ class RAM
 		return this._dataBits;
 	}
 	get maxAddress() {
-		return this._maxAddress;
+		return this._addressRange.max;
 	}
 	get maxValue() {
-		return this._maxValue;
+		return this._valueRange.max;
+	}
+	get addressRange() {
+		return this._addressRange;
+	}
+	get valueRange() {
+		return this._valueRange;
 	}
 	read(address) {
-		if (address < 0 || address > this._maxAddress) {
-			throw new Error('RAM read failed: address out of range');
-		}
+		address = this._addressRange.fix(address);
 		return this._data[address];
 	}
 	write(address, value) {
-		if (address < 0 || address > this._maxAddress) {
-			throw new Error('RAM write failed: address out of range');
-		}
-		if (value < 0 || value > this._maxValue) {
-			throw new Error('RAM write failed: data value out of range');
-		}
+		address = this._addressRange.fix(address);
+		value = this._valueRange.fix(value);
 		this._data[address] = value;
 		return true;
 	}
