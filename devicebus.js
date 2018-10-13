@@ -16,9 +16,7 @@ class DeviceBus extends Bus
 		}
 	}
 	setData(address, data) {
-		if (data < 0 || data > this._maxData) {
-			throw new Error('Invalid device bus write: data out of range');
-		}
+		data = this._valueRange.fix(data);
 		let device = this._getDeviceAt(address);
 		if (device) {
 			return device.device.setData(data);

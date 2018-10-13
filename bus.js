@@ -11,7 +11,9 @@ class Bus extends EventEmitter
 		this._addressBits = addressBits;
 		this._dataBits = dataBits;
 		this._maxAddress = Math.pow(2, addressBits) - 1;
-		this._maxData = Math.pow(2, dataBits) - 1;
+		this._valueRange = new ThrowingRange(
+			0, Math.pow(2, dataBits) - 1, 'Data value out of bus range'
+		);
 		this._devices = [];
 		this._maxAssignedAddress = -1;
 	}
@@ -20,6 +22,9 @@ class Bus extends EventEmitter
 	}
 	get dataBits() {
 		return this._dataBits;
+	}
+	get valueRange() {
+		return this._valueRange;
 	}
 	get maxAddress() {
 		return this._maxAddress;
