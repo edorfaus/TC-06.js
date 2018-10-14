@@ -1,7 +1,10 @@
 // 1001 PMOV <4b: source reg.> <4b: target reg.> <5b: start> <5b: end> <5b: shift> <1b: shiftBack> <4b: ignored>
-class PmovInstruction
-{
-	run(processor, instruction) {
+Operations.TC_06.Pmov = class Pmov {
+	constructor(registers, targetValueRange) {
+		this._registers = registers;
+		this._targetValueRange = targetValueRange;
+	}
+	run(instruction) {
 		let sourceReg = (instruction >>> 24) & 0x0000000F;
 		let targetReg = (instruction >>> 20) & 0x0000000F;
 		let startBit = (instruction >>> 15) & 0x0000001F;
@@ -10,19 +13,13 @@ class PmovInstruction
 		let direction = (instruction >>> 4) & 0x00000001;
 
 		if (startBit > endBit) {
-			return Processor.RUN_ERROR;
+			throw new Error('Invalid PMOV: startBit > endBit');
 		}
 
-		let sourceValue = processor.registers.read(sourceReg);
-		if (typeof sourceValue === 'undefined') {
-			return Processor.RUN_ERROR;
-		}
+		let sourceValue = this._registers.read(sourceReg);
 		let targetValue = 0;
 		if (endBit - startBit < 31) {
-			targetValue = processor.registers.read(targetReg);
-			if (typeof targetValue === 'undefined') {
-				return Processor.RUN_ERROR;
-			}
+			targetValue = this._registers.read(targetReg);
 		}
 
 		let sourceStr = (sourceValue >>> 0).toString(2).padStart(32, '0');
@@ -54,11 +51,11 @@ class PmovInstruction
 
 		targetValue = parseInt(targetStr, 2);
 
-		let result = processor.registers.write(targetReg, targetValue);
-		if (typeof result === 'undefined') {
-			return Processor.RUN_ERROR;
-		}
+		// Ensure the result is with our target value range.
+		targetValue = this._targetValueRange.fix(targetValue);
 
-		return Processor.RUN_DONE;
+		this._registers.write(targetReg, targetValue);
+
+		return OperationState.NEXT;
 	}
 }

@@ -16,6 +16,8 @@
 
 	<script type="text/javascript" src="range/range.js"></script>
 	<script type="text/javascript" src="range/throwingrange.js"></script>
+	<script type="text/javascript" src="range/defaultingrange.js"></script>
+	<script type="text/javascript" src="range/wrappingrange.js"></script>
 
 	<script type="text/javascript" src="ui/uimanager.js"></script>
 
@@ -25,23 +27,32 @@
 	<script type="text/javascript" src="memorybus.js"></script>
 	<script type="text/javascript" src="devicebus.js"></script>
 
+	<script type="text/javascript" src="memory/singlewordmemory.js"></script>
+
 	<script type="text/javascript" src="devices/ram.js"></script>
 	<script type="text/javascript" src="devices/drive.js"></script>
 	<script type="text/javascript" src="devices/screen.js"></script>
 
-	<script type="text/javascript" src="instructions/nil.js"></script>
-	<script type="text/javascript" src="instructions/hlt.js"></script>
-	<script type="text/javascript" src="instructions/movi.js"></script>
-	<script type="text/javascript" src="instructions/movo.js"></script>
-	<script type="text/javascript" src="instructions/jmp.js"></script>
-	<script type="text/javascript" src="instructions/setdata.js"></script>
-	<script type="text/javascript" src="instructions/getdata.js"></script>
-	<script type="text/javascript" src="instructions/set.js"></script>
-	<script type="text/javascript" src="instructions/ifjmp.js"></script>
-	<script type="text/javascript" src="instructions/pmov.js"></script>
-	<script type="text/javascript" src="instructions/math.js"></script>
+	<script type="text/javascript" src="cpu/operationstate.js"></script>
 
-	<script type="text/javascript" src="processor.js"></script>
+	<script type="text/javascript" src="cpu/operations/_base.js"></script>
+	<script type="text/javascript" src="cpu/operations/noop.js"></script>
+
+	<script type="text/javascript" src="cpu/operations/tc-06/_base.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/nil.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/hlt.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/movi.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/movo.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/jmp.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/setdata.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/getdata.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/set.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/ifjmp.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/pmov.js"></script>
+	<script type="text/javascript" src="cpu/operations/tc-06/math.js"></script>
+
+	<script type="text/javascript" src="cpu/tc_06_controlunit.js"></script>
+	<script type="text/javascript" src="cpu/tc_06_instructionunit.js"></script>
 
 	<script type="text/javascript" src="renderer/tablescreenrenderer.js"></script>
 	<script type="text/javascript" src="renderer/systemcontrols.js"></script>

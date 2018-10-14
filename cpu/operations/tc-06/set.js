@@ -1,15 +1,15 @@
 // 0111 SET <4b: register> <2b: startPos> <8b: data> <14b: ignored>
-class SetInstruction
-{
-	run(processor, instruction) {
+Operations.TC_06.Set = class Set {
+	constructor(registers, targetValueRange) {
+		this._registers = registers;
+		this._targetValueRange = targetValueRange;
+	}
+	run(instruction) {
 		let register = (instruction >>>24) & 0x0000000F;
 		let startPos = (instruction >>>22) & 0x00000003;
 		let newData = (instruction >>>14) & 0x000000FF;
 
-		let value = processor.registers.read(register);
-		if (typeof value === 'undefined') {
-			return Processor.RUN_ERROR;
-		}
+		let value = this._registers.read(register);
 
 		switch (startPos) {
 			case 0: value = (value & 0x00FFFFFF) | (newData << 24); break;
@@ -19,14 +19,11 @@ class SetInstruction
 			default: throw new Error('Invalid SET startPos: ' + startPos);
 		}
 
-		// Ensure it's not negative
-		value = value >>> 0;
+		// Ensure the result is with our target value range.
+		value = this._targetValueRange.fix(value);
 
-		let result = processor.registers.write(register, value);
-		if (typeof result === 'undefined') {
-			return Processor.RUN_ERROR;
-		}
+		this._registers.write(register, value);
 
-		return Processor.RUN_DONE;
+		return OperationState.NEXT;
 	}
 }

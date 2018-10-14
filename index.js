@@ -14,22 +14,25 @@ let screenRenderer = new TableScreenRenderer(document.getElementById('screen-tab
 screenRenderer.link(screen);
 uiManager.add(screenRenderer);
 
-let instructions = [];
-instructions[0x0] = new NilInstruction();
-instructions[0x1] = new HltInstruction();
-instructions[0x2] = new MoviInstruction();
-instructions[0x3] = new MovoInstruction();
-instructions[0x4] = new JmpInstruction();
-instructions[0x5] = new SetdataInstruction();
-instructions[0x6] = new GetdataInstruction(0x1);
-instructions[0x7] = new SetInstruction();
-instructions[0x8] = new IfjmpInstruction(0x2, 0x3);
-instructions[0x9] = new PmovInstruction();
-instructions[0xA] = new MathInstruction();
+let valueRange = new ThrowingRange(
+	0, Math.pow(2, 32) - 1, 'Data value out of range'
+);
 
-let processor = new Processor(memoryBus, deviceBus, instructions);
+let registers = new RAM(4, 32);
+let programCounter = new SingleWordMemory(valueRange);
 
-clock.on('tick', () => processor.tick());
+let operations = Operations.TC_06(memoryBus, registers, programCounter, deviceBus);
+let controlUnit = new TC_06_ControlUnit(operations, programCounter);
+let cpuCore = new TC_06_InstructionUnit(controlUnit, memoryBus, programCounter);
+
+clock.on('tick', () => {
+	try {
+		cpuCore.runCycle()
+	} catch (e) {
+		console.error('CPU cycle failed', e);
+		clock.running = false;
+	}
+});
 
 new SystemControls(document.getElementById('system-controls')).link(clock);
 
@@ -42,7 +45,7 @@ uiManager.add(mainMemoryRenderer);
 let registersRenderer = new MemoryRenderer(
 	document.getElementById('registers'), uiManager
 );
-registersRenderer.link(processor.registers);
+registersRenderer.link(registers);
 uiManager.add(registersRenderer);
 
 [
