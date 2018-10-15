@@ -6,7 +6,7 @@ let deviceBus = new DeviceBus(4, 32);
 
 memoryBus.attachDevice(0, 32, new RAM(5, 32));
 
-let screen = new Screen(2, 4, 3);
+let screen = new Screen(2, 4, 3, 32, new RAM(4 + 3, 32));
 deviceBus.attachDevice(0, 1, screen);
 deviceBus.attachDevice(1, 1, new Drive(new RAM(8, 32)));
 
