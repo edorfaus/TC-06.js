@@ -48,7 +48,7 @@ let MemoryRenderer = (() => {
 				this._currentRange = [
 					[0, Math.max(0, Math.min(31, this._memory.maxAddress))]
 				];
-				this._rangeInput.value = this._currentRange[0].join('-');
+				this._rangeInput.value = this._currentRange[0].join(':');
 			}
 
 			this._renderHeader();
@@ -205,7 +205,7 @@ let MemoryRenderer = (() => {
 		}
 		_parseRange(range) {
 			range = range.trim();
-			let regex = /\s*(0[xX][0-9a-fA-F]+|[0-9]+)(-(0[xX][0-9a-fA-F]+|[0-9]+))?\s*,?/y
+			let regex = /\s*(0[xX][0-9a-fA-F]+|[0-9]+)(:(0[xX][0-9a-fA-F]+|[0-9]+))?\s*,?/y
 			let result = regex.exec(range);
 			let lastIndex = regex.lastIndex;
 			let ranges = [];
