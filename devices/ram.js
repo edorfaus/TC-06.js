@@ -23,9 +23,6 @@ class RAM
 	get dataBits() {
 		return this._dataBits;
 	}
-	get maxValue() {
-		return this._valueRange.max;
-	}
 	get addressRange() {
 		return this._addressRange;
 	}
