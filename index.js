@@ -1,7 +1,7 @@
 let uiManager = new UIManager();
 
 let clock = new Clock(uiManager);
-let memoryBus = new MemoryBus(24, 32);
+let memoryBus = new MemoryBus(5, 32);
 let deviceBus = new DeviceBus(4, 32);
 
 memoryBus.attachDevice(0, 32, new RAM(5, 32));

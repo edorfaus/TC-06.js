@@ -17,7 +17,6 @@ class Bus extends EventEmitter
 			0, Math.pow(2, dataBits) - 1, 'Data value out of bus range'
 		);
 		this._devices = [];
-		this._maxAssignedAddress = -1;
 	}
 	get addressBits() {
 		return this._addressBits;
@@ -30,9 +29,6 @@ class Bus extends EventEmitter
 	}
 	get valueRange() {
 		return this._valueRange;
-	}
-	get maxAssignedAddress() {
-		return this._maxAssignedAddress;
 	}
 	attachDevice(startAddress, addressCount, device) {
 		if (addressCount < 1) {
@@ -59,9 +55,6 @@ class Bus extends EventEmitter
 			endAddress: endAddress,
 			device: device
 		});
-		if (endAddress > this._maxAssignedAddress) {
-			this._maxAssignedAddress = endAddress;
-		}
 		if (EventEmitter.hasListener(this, 'attach-device')) {
 			let _this = this;
 			let event = {
