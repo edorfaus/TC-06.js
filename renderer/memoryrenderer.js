@@ -46,7 +46,7 @@ let MemoryRenderer = (() => {
 
 			if (this._memory) {
 				this._currentRange = [
-					[0, Math.max(0, Math.min(31, this._memory.maxAddress))]
+					[0, Math.max(0, Math.min(31, this._memory.addressRange.max))]
 				];
 				this._rangeInput.value = this._currentRange[0].join(':');
 			}
@@ -90,7 +90,7 @@ let MemoryRenderer = (() => {
 			headerDiv.innerHTML = '';
 
 			let line = headerDiv.appendChild(document.createElement('div'));
-			line.textContent = 'Max address: ' + this._memory.maxAddress;
+			line.textContent = 'Max address: ' + this._memory.addressRange.max;
 
 			line = headerDiv.appendChild(document.createElement('ul'));
 			let li, input, label;
@@ -278,7 +278,7 @@ let MemoryRenderer = (() => {
 					if (range.length == 0) {
 						range = [[0, 0]];
 					}
-					let max = this._memory.maxAddress;
+					let max = this._memory.addressRange.max;
 					let count = 0;
 					for (let r of range) {
 						if (r[0] < 0 || r[0] > max || r[1] < 0 || r[1] > max) {

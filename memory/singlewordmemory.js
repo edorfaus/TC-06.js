@@ -10,9 +10,6 @@ class SingleWordMemory {
 	get dataBits() {
 		return this._valueRange.sizeBits;
 	}
-	get maxAddress() {
-		return 0;
-	}
 	get maxValue() {
 		return this._valueRange.max;
 	}

@@ -32,7 +32,7 @@ Operations.TC_06.SetData = class SetData {
 				let direction = (instruction >>> 21) & 0x00000001;
 				let address = instruction & 0x001FFFFF;
 				if (direction == 1) {
-					address = this._memory.maxAddress - address;
+					address = this._memory.addressRange.max - address;
 				}
 				value = this._memory.read(address);
 				break;

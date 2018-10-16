@@ -31,9 +31,6 @@ class Bus extends EventEmitter
 	get valueRange() {
 		return this._valueRange;
 	}
-	get maxAddress() {
-		return this._addressRange.max;
-	}
 	get maxAssignedAddress() {
 		return this._maxAssignedAddress;
 	}

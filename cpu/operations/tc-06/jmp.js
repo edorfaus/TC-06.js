@@ -13,7 +13,7 @@ Operations.TC_06.Jmp = class Jmp {
 			case 0: newPC = this._programCounter.read(0) + address; break;
 			case 1: newPC = address; break;
 			case 2: newPC = this._programCounter.read(0) - address; break;
-			case 3: newPC = this._memory.maxAddress - address; break;
+			case 3: newPC = this._memory.addressRange.max - address; break;
 			default: throw new Error('Invalid JMP flag: ' + flag);
 		}
 		this._programCounter.write(0, newPC);
