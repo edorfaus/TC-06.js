@@ -10,7 +10,9 @@ class Bus extends EventEmitter
 		}
 		this._addressBits = addressBits;
 		this._dataBits = dataBits;
-		this._maxAddress = Math.pow(2, addressBits) - 1;
+		this._addressRange = new ThrowingRange(
+			0, Math.pow(2, addressBits) - 1, 'Address out of bus range'
+		);
 		this._valueRange = new ThrowingRange(
 			0, Math.pow(2, dataBits) - 1, 'Data value out of bus range'
 		);
@@ -23,22 +25,26 @@ class Bus extends EventEmitter
 	get dataBits() {
 		return this._dataBits;
 	}
+	get addressRange() {
+		return this._addressRange;
+	}
 	get valueRange() {
 		return this._valueRange;
 	}
 	get maxAddress() {
-		return this._maxAddress;
+		return this._addressRange.max;
 	}
 	get maxAssignedAddress() {
 		return this._maxAssignedAddress;
 	}
 	attachDevice(startAddress, addressCount, device) {
+		if (addressCount < 1) {
+			throw new Error('Invalid addressCount: must be positive');
+		}
 		let endAddress = startAddress + addressCount - 1;
 		if (
-			startAddress < 0
-			|| addressCount < 1
-			|| startAddress > this._maxAddress
-			|| endAddress > this._maxAddress
+			this._addressRange.excludes(startAddress)
+			|| this._addressRange.excludes(endAddress)
 		) {
 			throw new Error('Invalid addresses given to Bus.attachDevice');
 		}
@@ -73,6 +79,7 @@ class Bus extends EventEmitter
 		return this;
 	}
 	_getDeviceAt(address) {
+		address = this._addressRange.fix(address);
 		for (let device of this._devices) {
 			if (address >= device.startAddress && address <= device.endAddress) {
 				return device;
