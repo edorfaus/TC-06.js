@@ -19,7 +19,7 @@ screenRenderer.link(screen);
 uiManager.add(screenRenderer);
 
 let registers = new RAM(4, valueRange);
-let programCounter = new SingleWordMemory(valueRange);
+let programCounter = new SingleWordMemory(memoryBus.addressRange);
 
 let operations = Operations.TC_06(memoryBus, registers, programCounter, deviceBus);
 let controlUnit = new TC_06_ControlUnit(operations, programCounter);
