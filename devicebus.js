@@ -1,7 +1,7 @@
 class DeviceBus extends Bus
 {
-	constructor(addressBits, dataBits) {
-		super(addressBits, dataBits);
+	constructor(addressBits, valueRange) {
+		super(addressBits, valueRange);
 	}
 	attachDevice(startAddress, addressCount, device) {
 		if (!device || !device.getData || !device.setData) {

@@ -1,24 +1,24 @@
+let valueRange = new ThrowingRange(
+	0, Math.pow(2, 32) - 1, 'Data value out of range'
+);
+
 let uiManager = new UIManager();
 
 let clock = new Clock(uiManager);
-let memoryBus = new MemoryBus(5, 32);
-let deviceBus = new DeviceBus(4, 32);
+let memoryBus = new MemoryBus(5, valueRange);
+let deviceBus = new DeviceBus(4, valueRange);
 
-memoryBus.attachDevice(0, 32, new RAM(5, 32));
+memoryBus.attachDevice(0, 32, new RAM(5, valueRange));
 
-let screen = new Screen(2, 4, 3, 32, new RAM(4 + 3, 32));
+let screen = new Screen(2, 4, 3, 32, new RAM(4 + 3, valueRange));
 deviceBus.attachDevice(0, 1, screen);
-deviceBus.attachDevice(1, 1, new Drive(new RAM(8, 32)));
+deviceBus.attachDevice(1, 1, new Drive(new RAM(8, valueRange)));
 
 let screenRenderer = new TableScreenRenderer(document.getElementById('screen-table'));
 screenRenderer.link(screen);
 uiManager.add(screenRenderer);
 
-let valueRange = new ThrowingRange(
-	0, Math.pow(2, 32) - 1, 'Data value out of range'
-);
-
-let registers = new RAM(4, 32);
+let registers = new RAM(4, valueRange);
 let programCounter = new SingleWordMemory(valueRange);
 
 let operations = Operations.TC_06(memoryBus, registers, programCounter, deviceBus);

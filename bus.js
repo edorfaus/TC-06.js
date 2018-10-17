@@ -1,20 +1,15 @@
 class Bus extends EventEmitter
 {
-	constructor(addressBits, dataBits, ...knownEvents) {
+	constructor(addressBits, valueRange, ...knownEvents) {
 		super('attach-device', ...knownEvents);
 		if (addressBits < 1) {
 			throw new Error('Bus address bits out of range (must be above 0)');
-		}
-		if (dataBits < 1) {
-			throw new Error('Bus data bits out of range (must be above 0)');
 		}
 		this._addressBits = addressBits;
 		this._addressRange = new ThrowingRange(
 			0, Math.pow(2, addressBits) - 1, 'Address out of bus range'
 		);
-		this._valueRange = new ThrowingRange(
-			0, Math.pow(2, dataBits) - 1, 'Data value out of bus range'
-		);
+		this._valueRange = valueRange;
 		this._devices = [];
 	}
 	get addressBits() {
