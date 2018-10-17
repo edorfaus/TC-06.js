@@ -7,9 +7,6 @@ class SingleWordMemory {
 	get addressBits() {
 		return 1;
 	}
-	get dataBits() {
-		return this._valueRange.sizeBits;
-	}
 	get addressRange() {
 		return this._addressRange;
 	}

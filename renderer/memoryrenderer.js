@@ -330,24 +330,42 @@ let MemoryRenderer = (() => {
 
 MemoryRenderer.valueFormatters.set('Bin', {
 	format(value, memory) {
-		return value.toString(2).padStart(memory.dataBits, '0');
+		let bits = memory.valueRange.bitsTwosComplement;
+		if (value < 0) {
+			value += Math.pow(2, bits);
+		}
+		return value.toString(2).padStart(bits, '0');
 	},
 	parse(value, memory) {
-		if (value.length === memory.dataBits && /^[01]+$/.test(value)) {
-			return Number.parseInt(value, 2);
+		let bits = memory.valueRange.bitsTwosComplement;
+		if (value.length === bits && /^[01]+$/.test(value)) {
+			let result = Number.parseInt(value, 2);
+			if (memory.valueRange.min < 0 && value.startsWith("1")) {
+				result -= Math.pow(2, bits);
+			}
+			return result;
 		}
 		return null;
 	}
 });
 MemoryRenderer.valueFormatters.set('Hex', {
 	format(value, memory) {
-		let width = Math.ceil(memory.dataBits / 4);
+		let bits = memory.valueRange.bitsTwosComplement;
+		let width = Math.ceil(bits / 4);
+		if (value < 0) {
+			value += Math.pow(2, bits);
+		}
 		return value.toString(16).toUpperCase().padStart(width, '0')
 	},
 	parse(value, memory) {
-		let width = Math.ceil(memory.dataBits / 4);
+		let bits = memory.valueRange.bitsTwosComplement;
+		let width = Math.ceil(bits / 4);
 		if (value.length === width && /^[0-9a-fA-F]+$/.test(value)) {
-			return Number.parseInt(value, 16);
+			let result = Number.parseInt(value, 16);
+			if (memory.valueRange.min < 0 && result >= Math.pow(2, bits - 1)) {
+				result -= Math.pow(2, bits);
+			}
+			return result;
 		}
 		return null;
 	}
@@ -357,7 +375,7 @@ MemoryRenderer.valueFormatters.set('Dec', {
 		return value.toString(10);
 	},
 	parse(value, memory) {
-		if (/^\d+$/.test(value)) {
+		if (/^-?\d+$/.test(value)) {
 			return Number.parseInt(value, 10);
 		}
 		return null;

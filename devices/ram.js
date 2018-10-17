@@ -8,7 +8,6 @@ class RAM
 			throw new Error('RAM data bits out of range (must be above 0)');
 		}
 		this._addressBits = addressBits;
-		this._dataBits = dataBits;
 		this._addressRange = new ThrowingRange(
 			0, Math.pow(2, addressBits) - 1, 'Address out of range'
 		);
@@ -19,9 +18,6 @@ class RAM
 	}
 	get addressBits() {
 		return this._addressBits;
-	}
-	get dataBits() {
-		return this._dataBits;
 	}
 	get addressRange() {
 		return this._addressRange;
