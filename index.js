@@ -5,10 +5,8 @@ let valueRange = new ThrowingRange(
 let uiManager = new UIManager();
 
 let clock = new Clock(uiManager);
-let memoryBus = new MemoryBus(5, valueRange);
+let memoryBus = new DelegatingMemory([new RAM(5, valueRange)]);
 let deviceBus = new DeviceBus(4, valueRange);
-
-memoryBus.attachDevice(0, 32, new RAM(5, valueRange));
 
 let screen = new Screen(2, 4, 3, 32, new RAM(4 + 3, valueRange));
 deviceBus.attachDevice(0, 1, screen);
@@ -36,7 +34,7 @@ clock.on('tick', () => {
 
 new SystemControls(document.getElementById('system-controls')).link(clock);
 
-let mainMemoryRenderer = new MainMemoryRenderer(
+let mainMemoryRenderer = new MemoryRenderer(
 	document.getElementById('main-memory'), uiManager
 );
 mainMemoryRenderer.link(memoryBus);
