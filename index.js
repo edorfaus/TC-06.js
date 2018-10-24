@@ -1,5 +1,5 @@
 let valueRange = new ThrowingRange(
-	0, Math.pow(2, 32) - 1, 'Data value out of range'
+	-Math.pow(2, 31), Math.pow(2, 31) - 1, 'Data value out of range'
 );
 
 let uiManager = new UIManager();
