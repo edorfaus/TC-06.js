@@ -5,20 +5,20 @@ let valueRange = new ThrowingRange(
 let uiManager = new UIManager();
 
 let clock = new Clock(uiManager);
-let memoryBus = new DelegatingMemory([new RAM(5, valueRange)]);
+let memoryBus = new DelegatingMemory([ArrayMemory.forBits(5, valueRange)]);
 
-let screen = new Screen(2, 4, 3, 32, new RAM(4 + 3, valueRange));
+let screen = new Screen(2, 4, 3, 32, ArrayMemory.forBits(4 + 3, valueRange));
 
 let deviceBus = new ArrayDeviceBus([
 	screen,
-	new Drive(new RAM(8, valueRange))
+	new Drive(ArrayMemory.forBits(8, valueRange))
 ]);
 
 let screenRenderer = new TableScreenRenderer(document.getElementById('screen-table'));
 screenRenderer.link(screen);
 uiManager.add(screenRenderer);
 
-let registers = new RAM(4, valueRange);
+let registers = ArrayMemory.forBits(4, valueRange);
 let programCounter = new SingleWordMemory(memoryBus.addressRange);
 
 let operations = Operations.TC_06(memoryBus, registers, programCounter, deviceBus);
