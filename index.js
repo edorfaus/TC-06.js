@@ -5,7 +5,7 @@ let valueRange = new ThrowingRange(
 let uiManager = new UIManager();
 
 let clock = new Clock(uiManager);
-let memoryBus = new DelegatingMemory([ArrayMemory.forBits(5, valueRange)]);
+let mainMemory = new DelegatingMemory([ArrayMemory.forBits(5, valueRange)]);
 
 let screen = new Screen(2, 4, 3, 32, ArrayMemory.forBits(4 + 3, valueRange));
 
@@ -19,11 +19,11 @@ screenRenderer.link(screen);
 uiManager.add(screenRenderer);
 
 let registers = ArrayMemory.forBits(4, valueRange);
-let programCounter = new SingleWordMemory(memoryBus.addressRange);
+let programCounter = new SingleWordMemory(mainMemory.addressRange);
 
-let operations = Operations.TC_06(memoryBus, registers, programCounter, deviceBus);
+let operations = Operations.TC_06(mainMemory, registers, programCounter, deviceBus);
 let controlUnit = new TC_06_ControlUnit(operations, programCounter);
-let cpuCore = new TC_06_InstructionUnit(controlUnit, memoryBus, programCounter);
+let cpuCore = new TC_06_InstructionUnit(controlUnit, mainMemory, programCounter);
 
 clock.on('tick', () => {
 	try {
@@ -39,7 +39,7 @@ new SystemControls(document.getElementById('system-controls')).link(clock);
 let mainMemoryRenderer = new MemoryRenderer(
 	document.getElementById('main-memory'), uiManager
 );
-mainMemoryRenderer.link(memoryBus);
+mainMemoryRenderer.link(mainMemory);
 uiManager.add(mainMemoryRenderer);
 
 let registersRenderer = new MemoryRenderer(
@@ -70,5 +70,5 @@ uiManager.add(registersRenderer);
 	0x48000010,
 
 	0x10000000
-].forEach((item, index) => memoryBus.write(index, item));
+].forEach((item, index) => mainMemory.write(index, item));
 uiManager.triggerRefresh();
