@@ -6,11 +6,13 @@ let uiManager = new UIManager();
 
 let clock = new Clock(uiManager);
 let memoryBus = new DelegatingMemory([new RAM(5, valueRange)]);
-let deviceBus = new DeviceBus(4, valueRange);
 
 let screen = new Screen(2, 4, 3, 32, new RAM(4 + 3, valueRange));
-deviceBus.attachDevice(0, 1, screen);
-deviceBus.attachDevice(1, 1, new Drive(new RAM(8, valueRange)));
+
+let deviceBus = new ArrayDeviceBus([
+	screen,
+	new Drive(new RAM(8, valueRange))
+]);
 
 let screenRenderer = new TableScreenRenderer(document.getElementById('screen-table'));
 screenRenderer.link(screen);
