@@ -15,6 +15,5 @@ class SingleWordMemory {
 	}
 	write(address, value) {
 		this._value = this._valueRange.fix(value);
-		return true;
 	}
 }

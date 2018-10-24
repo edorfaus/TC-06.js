@@ -59,6 +59,6 @@ class DelegatingMemory {
 		address = this._addressRange.fix(address);
 		data = this._valueRange.fix(data);
 		let device = this._getDeviceAt(address);
-		return device.device.write(address - device.addressOffset, data);
+		device.device.write(address - device.addressOffset, data);
 	}
 }

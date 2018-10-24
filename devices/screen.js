@@ -46,6 +46,6 @@ class Screen
 	}
 	setData(data) {
 		let address = this._getVideoMemoryAddress(data);
-		return this._videoMemory.write(address, data);
+		this._videoMemory.write(address, data);
 	}
 }

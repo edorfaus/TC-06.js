@@ -24,6 +24,5 @@ class RAM
 		address = this._addressRange.fix(address);
 		value = this._valueRange.fix(value);
 		this._data[address] = value;
-		return true;
 	}
 }

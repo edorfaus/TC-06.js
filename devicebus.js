@@ -19,7 +19,7 @@ class DeviceBus extends Bus
 		data = this._valueRange.fix(data);
 		let device = this._getDeviceAt(address);
 		if (device) {
-			return device.device.setData(data);
+			device.device.setData(data);
 		}
 	}
 }

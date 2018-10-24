@@ -313,11 +313,14 @@ let MemoryRenderer = (() => {
 					input.classList.add('error');
 				} else {
 					let address = this._dataInputAddresses.get(input);
-					let result = this._memory.write(address, value);
-					if (result === true) {
+					try {
+						this._memory.write(address, value);
 						input.classList.remove('error');
-					} else {
+					} catch (e) {
 						input.classList.add('error');
+						if (console && console.warn) {
+							console.warn('Memory write failed', e);
+						}
 					}
 					this._uiManager.triggerRefresh();
 				}

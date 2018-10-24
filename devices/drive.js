@@ -10,10 +10,10 @@ class Drive
 	setData(data) {
 		if (this._writeAddress === null) {
 			this._writeAddress = this._memory.addressRange.fix(data);
-			return true;
+			return;
 		}
 		let address = this._writeAddress;
 		this._writeAddress = null;
-		return this._memory.write(address, value);
+		this._memory.write(address, value);
 	}
 }
