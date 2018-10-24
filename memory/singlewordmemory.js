@@ -4,9 +4,6 @@ class SingleWordMemory {
 		this._valueRange = valueRange;
 		this._value = 0;
 	}
-	get addressBits() {
-		return 1;
-	}
 	get addressRange() {
 		return this._addressRange;
 	}

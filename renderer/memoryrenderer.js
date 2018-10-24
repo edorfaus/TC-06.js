@@ -147,7 +147,8 @@ let MemoryRenderer = (() => {
 			}
 			let formatter = this._getFormatter();
 			let inputAddresses = this._dataInputAddresses;
-			let addressLengthHex = Math.ceil(memory.addressBits / 4);
+			let addressBits = memory.addressRange.bitsTwosComplement;
+			let addressLengthHex = Math.ceil(addressBits / 4);
 			let inputIter = this._existingDataInputs();
 			for (let address of this._rangeAddresses()) {
 				let input = inputIter.next().value;

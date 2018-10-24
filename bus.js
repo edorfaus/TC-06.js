@@ -5,15 +5,11 @@ class Bus extends EventEmitter
 		if (addressBits < 1) {
 			throw new Error('Bus address bits out of range (must be above 0)');
 		}
-		this._addressBits = addressBits;
 		this._addressRange = new ThrowingRange(
 			0, Math.pow(2, addressBits) - 1, 'Address out of bus range'
 		);
 		this._valueRange = valueRange;
 		this._devices = [];
-	}
-	get addressBits() {
-		return this._addressBits;
 	}
 	get addressRange() {
 		return this._addressRange;
