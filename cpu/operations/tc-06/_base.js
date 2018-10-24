@@ -14,8 +14,8 @@ Operations.TC_06 = (memory, registers, programCounter, deviceBus) => {
 	operations[0x2] = new O.MovI(memory, registers);
 	operations[0x3] = new O.MovO(memory, registers);
 	operations[0x4] = new O.Jmp(memory, programCounter, true);
-	operations[0x5] = new O.SetData(deviceBus, memory, registers, programCounter);
-	operations[0x6] = new O.GetData(deviceBus, memory, registers, programCounter, 0x1);
+	operations[0x5] = new O.SetData(deviceBus, memory, registers, programCounter, targetValueRange);
+	operations[0x6] = new O.GetData(deviceBus, memory, registers, programCounter, targetValueRange, 0x1);
 	operations[0x7] = new O.Set(registers, targetValueRange);
 	operations[0x8] = new O.IfJmp(memory, registers, programCounter, 0x2, 0x3, false);
 	operations[0x9] = new O.Pmov(registers, targetValueRange);

@@ -1,10 +1,16 @@
 // 0101 SETDATA <4b: target port> <2b: flag> <22b: data, depends on flag>
 Operations.TC_06.SetData = class SetData {
-	constructor(deviceBus, memory, registers, programCounter) {
+	constructor(
+		deviceBus, memory, registers, programCounter, targetValueRange
+	) {
 		this._deviceBus = deviceBus;
 		this._registers = registers;
 		this._memory = memory;
 		this._programCounter = programCounter;
+		this._targetValueRange = targetValueRange;
+
+		this._constantValueShift = targetValueRange.bitsTwosComplement - 22;
+		this._constantValueShift = Math.max(0, this._constantValueShift);
 	}
 	run(instruction) {
 		let port = (instruction >>> 24) & 0x0000000F;
@@ -12,8 +18,8 @@ Operations.TC_06.SetData = class SetData {
 		let value;
 		switch (flag) {
 			case 0: {
-				// The right shift ensures it's not negative
-				value = (instruction << 10) >>> 0;
+				value = (instruction & 0x003FFFFF) << this._constantValueShift;
+				value = this._targetValueRange.fix(value);
 				break;
 			}
 			case 1: {

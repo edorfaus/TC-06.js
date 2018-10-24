@@ -1,11 +1,18 @@
 // 0110 GETDATA <4b: target port> <2b: flag> <22b: data, depends on flag>
 Operations.TC_06.GetData = class GetData {
-	constructor(deviceBus, memory, registers, programCounter, outRegister = 1) {
+	constructor(
+		deviceBus, memory, registers, programCounter, targetValueRange,
+		outRegister = 1
+	) {
 		this._deviceBus = deviceBus;
 		this._registers = registers;
 		this._memory = memory;
 		this._programCounter = programCounter;
+		this._targetValueRange = targetValueRange;
 		this._outRegister = outRegister;
+
+		this._constantValueShift = targetValueRange.bitsTwosComplement - 22;
+		this._constantValueShift = Math.max(0, this._constantValueShift);
 	}
 	run(instruction) {
 		let port = (instruction >>> 24) & 0x0000000F;
@@ -13,8 +20,8 @@ Operations.TC_06.GetData = class GetData {
 		let value;
 		switch (flag) {
 			case 0: {
-				// The right shift ensures it's not negative
-				value = (instruction << 10) >>> 0;
+				value = (instruction & 0x003FFFFF) << this._constantValueShift;
+				value = this._targetValueRange.fix(value);
 				break;
 			}
 			case 1: {
