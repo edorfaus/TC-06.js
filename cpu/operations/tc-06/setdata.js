@@ -46,6 +46,17 @@ Operations.TC_06.SetData = class SetData {
 			case 3: {
 				let register = (instruction >>> 18) & 0x0000000F;
 				value = this._registers.read(register);
+
+				let extended = (instruction >>> 17) & 0x00000001;
+				if (extended != 0) {
+
+					let register2 = (instruction >>> 13) & 0x0000000F;
+					let value2 = this._registers.read(register2);
+
+					this._deviceBus.setDataExtended(port, value, value2);
+
+					return OperationState.NEXT;
+				}
 				break;
 			}
 			default: throw new Error('Invalid SETDATA flag: ' + flag);

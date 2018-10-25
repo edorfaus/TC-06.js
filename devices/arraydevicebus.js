@@ -25,4 +25,7 @@ class ArrayDeviceBus {
 	setData(port, data) {
 		this._getDeviceAt(port).setData(data);
 	}
+	setDataExtended(port, data1, data2) {
+		this._getDeviceAt(port).setDataExtended(data1, data2);
+	}
 }

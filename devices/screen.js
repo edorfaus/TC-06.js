@@ -23,8 +23,8 @@ class Screen
 		this._getShift = totalBits - xBits - yBits;
 		this._setShift = totalBits - xBits - yBits - colorBits;
 		this._mask = Math.pow(2, xBits + yBits) - 1;
+		this._yMask = Math.pow(2, yBits) - 1;
 		this._videoMemory = videoMemory;
-
 	}
 	get videoMemory() {
 		return this._videoMemory;
@@ -45,5 +45,21 @@ class Screen
 	setData(data) {
 		let address = (data >>> this._setShift) & this._mask;
 		this._videoMemory.write(address, data);
+	}
+	setDataExtended(data1, data2) {
+		let address = (data1 >>> this._setShift) & this._mask;
+		let offsets = (data2 >>> this._getShift) & this._mask;
+
+		let y = (address & this._yMask) + (offsets & this._yMask);
+		if (y > this._yMask) {
+			throw new Error('Y position out of range');
+		}
+
+		address += offsets;
+		if (address > this._mask) {
+			throw new Error('X position out of range');
+		}
+
+		this._videoMemory.write(address, data1);
 	}
 }

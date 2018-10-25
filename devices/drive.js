@@ -16,4 +16,7 @@ class Drive
 		this._writeAddress = null;
 		this._memory.write(address, data);
 	}
+	setDataExtended(address, data) {
+		this._memory.write(address, data);
+	}
 }
