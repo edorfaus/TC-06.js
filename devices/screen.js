@@ -20,7 +20,8 @@ class Screen
 		this._colorBits = colorBits;
 		this._xBits = xBits;
 		this._yBits = yBits;
-		this._shift = totalBits - colorBits - xBits - yBits;
+		this._getShift = totalBits - xBits - yBits;
+		this._setShift = totalBits - xBits - yBits - colorBits;
 		this._mask = Math.pow(2, xBits + yBits) - 1;
 		this._videoMemory = videoMemory;
 
@@ -37,15 +38,12 @@ class Screen
 	get yBits() {
 		return this._yBits;
 	}
-	_getVideoMemoryAddress(data) {
-		return (data >>> this._shift) & this._mask;
-	}
 	getData(data) {
-		let address = this._getVideoMemoryAddress(data);
+		let address = (data >>> this._getShift) & this._mask;
 		return this._videoMemory.read(address);
 	}
 	setData(data) {
-		let address = this._getVideoMemoryAddress(data);
+		let address = (data >>> this._setShift) & this._mask;
 		this._videoMemory.write(address, data);
 	}
 }
