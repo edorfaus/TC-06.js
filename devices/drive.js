@@ -14,6 +14,6 @@ class Drive
 		}
 		let address = this._writeAddress;
 		this._writeAddress = null;
-		this._memory.write(address, value);
+		this._memory.write(address, data);
 	}
 }
